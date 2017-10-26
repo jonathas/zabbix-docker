@@ -4,9 +4,9 @@ These files are for running the Zabbix server and the Zabbix agent on Docker.
 
 ## Zabbix Server
 
-Change the password inside the docker-compose.yml file, as the one that is there is a random one.
+1 - Change the password inside the docker-compose.yml file, as the one that is there is a random one.
 
-Start the server as root or with sudo, as the agent needs to be privileged:
+2 - Start the server as root or with sudo, as the agent needs to be privileged:
 
 ```bash
 $ sudo docker-compose up -d
@@ -21,17 +21,21 @@ Password: zabbix
 
 In the servers you want to monitor, you need to install a Zabbix agent which communicates with the Zabbix server. This agent needs to run in privileged mode, so it is able to get deeper system statistics.
 
-1 - Send the content inside the zabbix-agent directory to the server you want to monitor, then you can start it with:
+1 - Send the content inside the zabbix-agent directory to the server you want to monitor
+
+2 - Change ZBX_SERVER_HOST inside the docker-compose.yml file so it points to your Zabbix server.
+
+3 - Start the agent:
 
 ```bash
 $ sudo docker-compose up -d
 ```
 
-2 - Change the path inside the zabbix-agent/host/etc/systemd/system/docker-zabbix-agent.service to the one where your docker-compose.yml file is in the server.
+4 - Change the path inside the zabbix-agent/host/etc/systemd/system/docker-zabbix-agent.service to the one where your docker-compose.yml file is in the server.
 
-3 - Copy this docker-zabbix-agent.service you just changed to the directory /etc/systemd/system
+5 - Copy this docker-zabbix-agent.service you just changed to the directory /etc/systemd/system
 
-4 - Reload the daemons and enable the one you just created, so it runs automatically in case the system is rebooted:
+6 - Reload the daemons and enable the one you just created, so it runs automatically in case the system is rebooted:
 
 ```bash
 $ sudo systemctl daemon-reload
