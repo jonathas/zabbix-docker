@@ -15,6 +15,7 @@ $ sudo docker-compose up -d
 For the first time you login, the credentials are:
 
 Username: Admin
+
 Password: zabbix
 
 ## Zabbix Agent
