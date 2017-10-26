@@ -1,0 +1,14 @@
+version: "2"
+services:
+    agent:
+        image: zabbix/zabbix-agent:alpine-3.2-latest
+        privileged: true
+        environment: 
+            - ZBX_HOSTNAME=zabbix-monitoring
+            - ZBX_SERVER_HOST=167.114.236.89
+        network_mode: host
+
+networks:
+    default:
+        external:
+            name: "host"

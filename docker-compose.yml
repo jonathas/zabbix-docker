@@ -1,0 +1,51 @@
+version: "2"
+services:
+    server:
+        build: zabbix-server
+        depends_on: 
+            - db
+        environment: 
+            - DB_SERVER_HOST=127.0.0.1
+            - DB_SERVER_PORT=5432
+            - POSTGRES_USER=zabbix
+            - POSTGRES_PASSWORD=7ozX3wBdEZFVcoi
+            - POSTGRES_DB=zabbix
+        network_mode: host
+
+    frontend:
+        image: zabbix/zabbix-web-nginx-pgsql:alpine-3.2-latest
+        depends_on: 
+            - server
+        environment: 
+            - DB_SERVER_HOST=127.0.0.1
+            - POSTGRES_USER=zabbix
+            - POSTGRES_PASSWORD=7ozX3wBdEZFVcoi
+            - ZBX_SERVER_HOST=127.0.0.1
+            - TZ=Europe/Prague
+        network_mode: host
+    
+    agent:
+        image: zabbix/zabbix-agent:alpine-3.2-latest
+        privileged: true
+        depends_on: 
+            - server
+        environment: 
+            - ZBX_HOSTNAME=zabbix-monitoring
+            - ZBX_SERVER_HOST=127.0.0.1
+        network_mode: host
+
+    db:
+        image: postgres:9.6.2-alpine
+        volumes:
+            - "./pgsql_data:/var/lib/postgresql/data/pgdata"
+        environment: 
+            - POSTGRES_USER=zabbix
+            - POSTGRES_PASSWORD=7ozX3wBdEZFVcoi
+            - POSTGRES_DB=zabbix
+            - PGDATA=/var/lib/postgresql/data/pgdata
+        network_mode: host
+        
+networks:
+    default:
+        external:
+            name: "host"
